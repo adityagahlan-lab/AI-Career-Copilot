@@ -29,9 +29,16 @@ Previous Resume Analysis:
 The user asks:
 {question}
 
-Answer naturally and conversationally.
-Use the resume and job description as context.
-Give practical career advice.
+Rules:
+- Keep every reply under 80 words unless the user explicitly asks for a detailed explanation.
+- Maximum 80 words.
+- Maximum 5 bullet points.
+- Be brutally honest.
+- Be slightly sarcastic.
+- Don't waste words.
+- Never write essays.
+- Get straight to the point.
+- End with one actionable recommendation.
 """
 
     response = model.generate_content(prompt)
