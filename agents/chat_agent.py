@@ -2,7 +2,6 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Load API key
 load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -10,7 +9,13 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 
-def chat_with_ai(question, resume_text, job_description, analysis):
+def chat_with_ai(question, resume_text, job_description, analysis, chat_history=None):
+
+    history_text = ""
+    if chat_history:
+        for msg in chat_history[-10:]:  # last 10 messages, keeps prompt size reasonable
+            role = "User" if msg["role"] == "user" else "Coach"
+            history_text += f"{role}: {msg['content']}\n"
 
     prompt = f"""
 You are an expert AI Career Coach.
@@ -26,7 +31,10 @@ Job Description:
 Previous Resume Analysis:
 {analysis}
 
-The user asks:
+Conversation so far:
+{history_text}
+
+The user now asks:
 {question}
 
 Rules:
@@ -42,5 +50,4 @@ Rules:
 """
 
     response = model.generate_content(prompt)
-
     return response.text
